@@ -1,5 +1,6 @@
 #include"Main.h"
 #include"UnivVar.h"
+#include "Player.h"
 
 World world;
 
@@ -70,17 +71,21 @@ int main() {
 	
 	shaderProgram.Activate();
 
-	Camera camera(1, 6, 1);
-	std::cout << "Create Camera" << std::endl;
+	Camera camera(1, 8, 1);
+	Player player(0, 0, 0);
+	std::cout << "Create Camera and Player" << std::endl;
 //Game loop
 
 	glfwSetCursorPos(Window, width/2, height/2);
 	while (!glfwWindowShouldClose(Window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		camera.Inputs(Window);
+		player.Inputs(Window);
 
-		camera.Matrix(camera.Position, camera.Orientation.x, camera.Orientation.y, shaderProgram);
+		camera.Position.x = player.Position.x;
+		camera.Position.z = player.Position.z;
+
+		camera.Matrix(player.Position, player.Orientation.x, player.Orientation.y, shaderProgram);
 		Entity.Bind();
 		Entity.Render(EntityMesh.Index.size());
 

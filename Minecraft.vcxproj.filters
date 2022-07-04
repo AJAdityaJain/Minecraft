@@ -31,12 +31,15 @@
     <Filter Include="Source Files\TERRAIN">
       <UniqueIdentifier>{c2c5272b-98bd-41bb-b8bc-b8fa361059cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ENTITY">
+      <UniqueIdentifier>{9a7b22fd-bd34-4781-87bc-6438da212f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ENTITY">
+      <UniqueIdentifier>{f5ca7726-d6f4-40b9-9e74-94567b08805f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VBO.cpp">
@@ -72,11 +75,14 @@
     <ClCompile Include="World.cpp">
       <Filter>Source Files\TERRAIN</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\ENTITY</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files\ENTITY</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EBO.h">
       <Filter>Header Files\GFX</Filter>
     </ClInclude>
@@ -109,6 +115,15 @@
     </ClInclude>
     <ClInclude Include="UnivVar.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\ENTITY</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\ENTITY</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\ENTITY</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
