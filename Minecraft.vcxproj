@@ -163,7 +163,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="UnivVar.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="VBO.h" />
     <ClInclude Include="World.h" />

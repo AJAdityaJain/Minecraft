@@ -1,5 +1,5 @@
-#ifndef UNIVERSAL_VARIABLES
-#define UNIVERSAL_VARIABLES
+#ifndef GLOBAL
+#define GLOBAL
 
 
 enum BLOCK {
@@ -9,6 +9,17 @@ enum BLOCK {
 	STONE,
 	BEDROCK,
 };
+
+struct Settings_Graphics {
+	float FOV = 70.0f;
+};
+
+struct Settings_Controls {
+	float Mouse_Sensitivity = 0.7f;
+};
+
+static Settings_Graphics Graphics;
+static Settings_Controls Controls;
 
 static const char* TEXTURES = "000000110411444444222222333333";
 

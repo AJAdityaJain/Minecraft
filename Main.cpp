@@ -1,7 +1,8 @@
 #include"Main.h"
-#include"UnivVar.h"
 #include "Player.h"
+#include"Global.h"
 
+//©Copyright Aditya Jain
 World world;
 
 int GetBlock(int x, int y, int z) {
@@ -46,24 +47,15 @@ int main() {
 	std::cout << "Setup Shader" << std::endl;
 
 	Mesh BlockMesh = Mesh();
-	Mesh EntityMesh = Mesh();
 	std::cout << "Terrain Gen" << std::endl;
 
 	world.GenerateChunk(0, 0);
 	world.EditMesh(BlockMesh);
 
-	EntityMesh.AddFace(FRONT , 0, 0, 0, 49);
-	EntityMesh.AddFace(BACK  , 0, 0, 0, 53);
-	EntityMesh.AddFace(TOP   , 0, 0, 0, 50);
-	EntityMesh.AddFace(BOTTOM, 0, 0, 0, 50);
-	EntityMesh.AddFace(EAST	 , 0, 0, 0, 50);
-	EntityMesh.AddFace(WEST  , 0, 0, 0, 50);
-
 	Renderer Block = Renderer();
-	Renderer Entity = Renderer();
+	
 	Block.Bind(BlockMesh);
-	Entity.Bind(EntityMesh);
-
+	
 	Texture textures("Resources\\textures.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	textures.texUnit(shaderProgram, "tex0", 0);
 	textures.Bind();
@@ -71,10 +63,12 @@ int main() {
 	
 	shaderProgram.Activate();
 
-	Camera camera(1, 8, 1);
+	Camera camera(0, 0, 0);
 	Player player(0, 0, 0);
 	std::cout << "Create Camera and Player" << std::endl;
 //Game loop
+
+	camera.ProjMatrix();
 
 	glfwSetCursorPos(Window, width/2, height/2);
 	while (!glfwWindowShouldClose(Window)) {
@@ -82,21 +76,16 @@ int main() {
 
 		player.Inputs(Window);
 
-		camera.Position.x = player.Position.x;
-		camera.Position.z = player.Position.z;
+		
+		camera.CMatrix(player.Position,player.CamOri);
 
-		camera.Matrix(player.Position, player.Orientation.x, player.Orientation.y, shaderProgram);
+	/*	camera.Matrix(player.Position, player.Orientation.x, player.Orientation.y, shaderProgram);
 		Entity.Bind();
-		Entity.Render(EntityMesh.Index.size());
+		Entity.Render(EntityMesh.Index.size());*/
 
 		camera.Matrix(shaderProgram);
 		Block.Bind();
-		Block.Render(BlockMesh.Index.size());	 
-
-		//std::cout << camera.Orientation2.x << " . " << camera.Orientation2.y << " . " << camera.Orientation2.z << " . " << std::endl;
-		//Entity.Bind();
-		//Entity.Render(EntityMesh.Index.size());
-		
+		Block.Render(BlockMesh.Index.size());	 		
 		
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
@@ -113,5 +102,3 @@ int main() {
 
 	return 0;
 }
-
-//©Copyright Aditya Jain

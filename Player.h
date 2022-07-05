@@ -2,6 +2,7 @@
 #define PLAYER_CLASS_H
 
 #include"Entity.h"
+#include"Global.h"
 #include "Main.h"
 
 void Clamp(float& intPtr, float clamp, int halt) {
@@ -14,28 +15,57 @@ void Clamp(float& intPtr, float clamp, int halt) {
 	}
 }
 
-
-
 class Player : public Entity {
 public:
 
-	float sensitivity = 0.7f;
+	glm::vec3 CamOri = glm::vec3(0,0,0);
 
 	double mouseX;
 	double mouseY;
 
-
 	Player(float x, float y, float z) : Entity::Entity(x, y, z)
 	{
-
 		mouseX = 0;
 		mouseY = 0;
+		Entity::speed = 0.1f;
+		Entity::Size = glm::vec3(1, 2, 1);
 	}
-
 
 	void Inputs(GLFWwindow* window)
 	{
+		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_RELEASE)
+		{
+			int W = (width / 2);
+			int H = (height / 2);
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+			glfwGetCursorPos(window, &mouseX, &mouseY);
+
+			mouseX = (W-mouseX ) / 1000 * Controls.Mouse_Sensitivity;
+			mouseY = (mouseY - H) / 1000 * Controls.Mouse_Sensitivity;
+
+			Orientation.x += mouseY;
+			Orientation.y += mouseX;
+			Clamp(Orientation.x, 0.4, true);
+			Clamp(Orientation.y, 1, false);
+
+			// Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
+			glfwSetCursorPos(window, W, H);
+		}
+		else
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+
+
+
 		glm::vec3 displacment = glm::vec3(0, 0, 0);
+		CamOri = displacment;
+
+		CamOri.y = cos((Orientation.x+0.5f) * 3.1416f);
+		float h = sin((Orientation.x+0.5f) * 3.1416f);
+		CamOri.z = cos(Orientation.y * 3.1416f)*h;
+		CamOri.x = sin(Orientation.y * 3.1416f)*h;
 
 		// Handles key inputs
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -43,7 +73,9 @@ public:
 			displacment.z += cos(Orientation.y * 3.1416f) * speed;
 			displacment.x += sin(Orientation.y * 3.1416f) * speed;
 		}
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+
+
+		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		{
 			displacment.z -= cos(Orientation.y * 3.1416f) * speed;
 			displacment.x -= sin(Orientation.y * 3.1416f) * speed;
@@ -53,7 +85,7 @@ public:
 			displacment.z += cos((Orientation.y + 0.5f) * 3.1416f) * speed;
 			displacment.x += sin((Orientation.y + 0.5f) * 3.1416f) * speed;
 		}
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		{
 			displacment.z -= cos((Orientation.y + 0.5f) * 3.1416f) * speed;
 			displacment.x -= sin((Orientation.y + 0.5f) * 3.1416f) * speed;
@@ -70,13 +102,6 @@ public:
 		{
 			displacment -= speed * Y;
 		}
-
-		Position += displacment;
-
-		if (!isPointInsideAABB(1, 0, 1)) {
-			Position -= displacment;
-		}
-
 		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -87,34 +112,14 @@ public:
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glEnable(GL_CULL_FACE);
 		}
-
-
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_RELEASE)
-		{
-			int W = (MAIN::width / 2);
-			int H = (MAIN::height / 2);
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
-			glfwGetCursorPos(window, &mouseX, &mouseY);
-
-			mouseX = (mouseX - W) / 1000*sensitivity;
-			mouseY = (mouseY - H) / 1000*sensitivity;
-
-			Orientation.x += mouseY;
-			Orientation.y += mouseX;
-			Clamp(Orientation.x, 0.4, true);
-			Clamp(Orientation.y, 1, false);
-		
-			// Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
-			glfwSetCursorPos(window, W, H);
+		if (GetBlock(Position.x, Position.y - 1, Position.z) != 0) {
+			Collision(displacment, Position.x, Position.y - 2, Position.z);
 		}
-		else
-		{
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		else {
+			Position += displacment;
 		}
+
 	}
-
-
 };
 
 #endif // !PLAYER_CLASS_H

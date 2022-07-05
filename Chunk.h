@@ -1,7 +1,7 @@
 #ifndef CHUNK_CLASS_H
 #define CHUNK_CLASS_H
 
-#include "UnivVar.h"
+#include "Global.h"
 #include "Mesh.h"
 #include "libraries/include/inc/Perlin.h"
 
