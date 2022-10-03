@@ -12,7 +12,7 @@ public:
 	void Delete();
 	void Bind();
 	void Bind(Mesh mesh);
-	void Render(size_t indexSize);
+	void Render(GLsizei mesh);
 };
 
 #endif

@@ -1,32 +1,17 @@
-#include"World.h"
+#include "World.h"
 
 void World::GenerateChunk(int x, int z)
 {
-	Chunk c (x, z);
-	c.Generate();
+	Chunk* c;
+	c = new Chunk(x, z);
+	c->Retrieve();
 	World::chunks.push_back(c);
-	c = NULL;
+	c = nullptr;
 }
-
-void World::EditMesh(Mesh& mesh)
+void World::SetMesh()
 {
-	for (int i = 0; i < World::chunks.size(); i++)
-	{
-		World::chunks[i].GetMesh(mesh);
-	}
-}
-
-int World::GetBlock(int x, int y, int z) {
-	{
-		int X = x / 16.0f;
-		int Z = z / 16.0f;
-
-		
-		for (int i = 0; i < chunks.size(); i ++) {
-			if (chunks[i].x == X && chunks[i].z == Z) {
-				return chunks[0].GetBlock(x%16, y, z%16);
-			}
-		}
-		return 0;
+	MainMesh.Clear();
+	for (int i = 0; i < chunks.size(); i++) {
+		chunks[i]->SetMesh(MainMesh);
 	}
 }

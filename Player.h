@@ -112,13 +112,8 @@ public:
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glEnable(GL_CULL_FACE);
 		}
-		if (GetBlock(Position.x, Position.y - 1, Position.z) != 0) {
-			Collision(displacment, Position.x, Position.y - 2, Position.z);
-		}
-		else {
-			Position += displacment;
-		}
 
+		Collision(displacment, Position.x, Position.y, Position.z);
 	}
 };
 

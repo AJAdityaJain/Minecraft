@@ -1,11 +1,11 @@
 #include "ShaderClass.h"
 #include "Main.h"
 
-#include<string>
-#include<fstream>
-#include<sstream>
-#include<iostream>
-#include<cerrno>
+//#include<string>
+//#include<fstream>
+//#include<sstream>
+//#include<iostream>
+//#include<cerrno>
 
 std::string getfilecontents(const char* filename)
 {
@@ -20,7 +20,6 @@ std::string getfilecontents(const char* filename)
 		in.close();
 		return(contents);
 	}
-	throw(errno);
 }
 
 

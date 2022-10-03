@@ -1,4 +1,7 @@
 #include"Camera.h"
+#include "libraries/include/glm/ext/matrix_float4x4.hpp"
+#include "libraries/include/glm/ext/matrix_transform.hpp"
+#include "libraries/include/glm/gtc/type_ptr.hpp"
 
 Camera::Camera(float x, float y, float z) {
 

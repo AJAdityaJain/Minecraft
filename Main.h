@@ -2,24 +2,21 @@
 #define MAIN
 
 #include<iostream>
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
 #include"Mesh.h"
 #include"Renderer.h"
-#include"World.h"
 #include"Texture.h"
 #include"ShaderClass.h"
 #include"Camera.h"
 
-static glm::vec3 X = glm::vec3(1.0f, 0.0f, 0.0f);
+#include "libraries/include/GLFW/glfw3.h"
+#include "libraries/include/glad/glad.h"
+
+static const glm::vec3 X = glm::vec3(1.0f, 0.0f, 0.0f);
 static const glm::vec3 Y = glm::vec3(0.0f, 1.0f, 0.0f);
 static const glm::vec3 Z = glm::vec3(0.0f, 0.0f, 1.0f);
 
 static const glm::vec3 Vec30 = glm::vec3(0, 0, 0);
 static const glm::vec3 Vec35 = glm::vec3(0.5f, 0.5f, 0.5f);
-
-
-int GetBlock(int x, int y, int z);
 
 int main();
 
