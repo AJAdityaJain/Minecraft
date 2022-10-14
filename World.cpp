@@ -8,6 +8,15 @@ int World::GetBlock(int x, int y, int z) {
 	}
 	return 1;
 }
+void World::SetBlock(int w, int x, int y, int z) {
+	for (size_t i = 0; i < chunks.size(); i++)
+	{
+		if (chunks[i]->x == (int)(x / 16) && chunks[i]->z == (int)(z / 16)) {
+			chunks[i]->SetBlock(w, x, y, z);
+		}
+	}
+	return;
+}
 void World::GenerateChunk(int x, int z)
 {
 	if (x >= 0 && z >= 0) {
@@ -24,6 +33,7 @@ void World::SetMesh()
 	for (int i = 0; i < chunks.size(); i++) {
 		chunks[i]->SetMesh(MainMesh);
 	}
+	Rend.Bind(MainMesh);
 }
 void World::Remove(glm::vec2 ch) {
 	for (int i = 0; i < chunks.size(); i++)

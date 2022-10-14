@@ -71,6 +71,9 @@
     <ClCompile Include="World.cpp">
       <Filter>Source Files\TERRAIN</Filter>
     </ClCompile>
+    <ClCompile Include="Raycast.cpp">
+      <Filter>Source Files\ENTITY</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EBO.h">
@@ -114,6 +117,9 @@
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Header Files\TERRAIN</Filter>
+    </ClInclude>
+    <ClInclude Include="Raycast.h">
+      <Filter>Header Files\ENTITY</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

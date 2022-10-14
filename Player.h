@@ -4,6 +4,7 @@
 #include"Entity.h"
 #include"Global.h"
 #include "Main.h"
+#include "Raycast.h"
 
 void Clamp(float& intPtr, float clamp, int halt) {
 	halt = halt == 0 ? -1 : 1;
@@ -20,6 +21,9 @@ public:
 
 	glm::vec3 CamOri = glm::vec3(0,0,0);
 
+	bool l = true;
+	bool r = true;
+
 	double mouseX;
 	double mouseY;
 
@@ -33,11 +37,9 @@ public:
 
 	void Inputs(GLFWwindow* window)
 	{
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_RELEASE)
-		{
 			int W = (width / 2);
 			int H = (height / 2);
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+			//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 			glfwGetCursorPos(window, &mouseX, &mouseY);
 
@@ -51,13 +53,7 @@ public:
 
 			// Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
 			glfwSetCursorPos(window, W, H);
-		}
-		else
-		{
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
-
-
+		
 
 		glm::vec3 displacment = glm::vec3(0, 0, 0);
 		CamOri = displacment;
@@ -111,6 +107,31 @@ public:
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glEnable(GL_CULL_FACE);
+		}
+
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && l) {
+			Raycast ray;
+			ray.Position = Position + Vec35;
+			ray.Orient(CamOri);
+			ray.MoveCheck(false);
+			Remesh();
+			l = false;
+		}
+
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE && !l) {
+			l = true;
+		}
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && r) {
+			Raycast ray;
+			ray.Position = Position + Vec35;
+			ray.Orient(CamOri);
+			ray.MoveCheck(true);
+			Remesh();
+			r = false;
+		}
+
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && !r) {
+			r = true;
 		}
 
 		Collision(displacment, Position.x, Position.y, Position.z);

@@ -12,6 +12,15 @@ int Get(int x, int y, int z) {
 	return a->GetBlock(x, y, z);
 }
 
+void Set(int w, int x, int y, int z) {
+	a->SetBlock(w, x, y, z);
+}
+
+void Remesh() {
+
+	a->SetMesh();
+}
+
 int SetupWindow(GLFWwindow*& Window) {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -53,10 +62,8 @@ int main() {
 
 	a = new World();
 	a->GenerateChunk(16,16);
-	a->SetMesh();
-	Renderer Block = Renderer();	
-	Block.Bind(a->MainMesh);
-	
+	Remesh();
+
 	std::cout << "Terrain Gen" << std::endl;
 
 
@@ -95,8 +102,7 @@ int main() {
 			LPlayerChunk = PlayerChunk;
 			a->Add(PlayerChunk);
 			a->Remove(PlayerChunk);
-			a->SetMesh();
-			Block.Bind(a->MainMesh);
+			Remesh();
 		}
 
 
@@ -105,7 +111,7 @@ int main() {
 		camera.CMatrix(player.Position,player.CamOri);
 
 		camera.Matrix(shaderProgram);
-		Block.Render(a->MainMesh.Index.size());
+		a->Rend.Render(a->MainMesh.Index.size());
 		
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
@@ -113,7 +119,7 @@ int main() {
 
 	std::cout << "Delete everything" << std::endl;
 
-	Block.Delete();
+	a->Rend.Delete();
 	textures.Delete();
 	shaderProgram.Delete();
 

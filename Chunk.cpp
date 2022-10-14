@@ -18,13 +18,10 @@ Chunk::Chunk(int X, int Z) {
 
 }
 void Chunk::SetBlock(int c,int x,int y , int z) {
-		Chunk::c[x][y][z] = (char)(c + 1);	
+	Chunk::c[x % 16][y % 64][z % 16] = (char)(c + 1);
 }
 char Chunk::GetChar(int x, int y, int z) {
-	if (x >= 0 && y >= 0 && z >= 0) {
-		return Chunk::c[x%16][y%64][z%16];
-	}
-	return '?';
+	return Chunk::c[x%16][y%64][z%16];
 }
 void Chunk::Generate() {
 
