@@ -8,6 +8,10 @@ World* a;
 glm::vec2 PlayerChunk;
 glm::vec2 LPlayerChunk;
 
+int Get(int x, int y, int z) {
+	return a->GetBlock(x, y, z);
+}
+
 int SetupWindow(GLFWwindow*& Window) {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -48,7 +52,7 @@ int main() {
 	
 
 	a = new World();
-	a->GenerateChunk(0,0);
+	a->GenerateChunk(16,16);
 	a->SetMesh();
 	Renderer Block = Renderer();	
 	Block.Bind(a->MainMesh);
@@ -74,10 +78,9 @@ int main() {
 	
 
 	Camera camera(0, 0, 0);
-	Player player(0, 30, 0);
+	Player player(16*16, 30, 16*16);
 	
 	std::cout << "Create Camera and Player" << std::endl;
-//Game loop
 
 	camera.ProjMatrix();
 
@@ -86,12 +89,12 @@ int main() {
 	while (!glfwWindowShouldClose(Window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		PlayerChunk.x = (int)(player.Position.x / 16);
-		PlayerChunk.y = (int)(player.Position.z / 16);
+		PlayerChunk.x = (int)(player.Position.x / 16);PlayerChunk.y = (int)(player.Position.z / 16);
 
 		if (PlayerChunk != LPlayerChunk) {
 			LPlayerChunk = PlayerChunk;
-			a->GenerateChunk(PlayerChunk.x, PlayerChunk.y);
+			a->Add(PlayerChunk);
+			a->Remove(PlayerChunk);
 			a->SetMesh();
 			Block.Bind(a->MainMesh);
 		}

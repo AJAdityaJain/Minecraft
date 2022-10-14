@@ -12,7 +12,7 @@ public:
 	
 	Chunk(int X=16, int Z=16);
 	void SetBlock(int c, int x, int y, int z);
-	int  GetBlock(int x, int y, int z);
+	char GetChar(int x, int y, int z);
 	
 	void Allocate();
 	void Retrieve();

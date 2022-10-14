@@ -20,14 +20,11 @@ Chunk::Chunk(int X, int Z) {
 void Chunk::SetBlock(int c,int x,int y , int z) {
 		Chunk::c[x][y][z] = (char)(c + 1);	
 }
-int Chunk::GetBlock(int x, int y, int z) {
-	x %= 16;
-	y %= 64;
-	z %= 16;
+char Chunk::GetChar(int x, int y, int z) {
 	if (x >= 0 && y >= 0 && z >= 0) {
-		return (int)(Chunk::c[x][y][z])-1;
+		return Chunk::c[x%16][y%64][z%16];
 	}
-	return 0;
+	return '?';
 }
 void Chunk::Generate() {
 
@@ -103,25 +100,25 @@ void Chunk::SetMesh(Mesh& mesh) {
 		{
 			for (short z = Chunk::z * 16; z < (Chunk::z * 16)+16; z++)
 			{
-				cb = GetBlock(x, y, z) * 6;
+				cb = Get(x, y, z) * 6;
 				if (cb != 0) {
 
-					if (GetBlock(x + 1, y, z) == AIR) {
+					if (Get(x + 1, y, z) == AIR) {
 						mesh.AddFace(EAST, x  , y, z  , TEXTURES[cb]);
 					}
-					if (GetBlock(x - 1, y, z) == AIR) {
+					if (Get(x - 1, y, z) == AIR) {
 						mesh.AddFace(WEST, x  , y, z  , TEXTURES[cb+1]);
 					}
-					if (GetBlock(x, y + 1, z) == AIR) {
+					if (Get(x, y + 1, z) == AIR) {
 						mesh.AddFace(TOP, x  , y, z  , TEXTURES[cb+2]);
 					}
-					if (GetBlock(x, y - 1, z) == AIR) {
+					if (Get(x, y - 1, z) == AIR) {
 						mesh.AddFace(BOTTOM, x  , y, z  , TEXTURES[cb+3]);
 					}
-					if (GetBlock(x, y, z + 1) == AIR) {
+					if (Get(x, y, z + 1) == AIR) {
 						mesh.AddFace(FRONT, x  , y, z  , TEXTURES[cb+4]);
 					}
-					if (GetBlock(x, y, z - 1) == AIR) {
+					if (Get(x, y, z - 1) == AIR) {
 						mesh.AddFace(BACK, x  , y, z  , TEXTURES[cb+5]);
 					}
 				}

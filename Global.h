@@ -12,6 +12,7 @@ enum BLOCK {
 
 struct Settings_Graphics {
 	float FOV = 70.0f;
+	int Render_Distance = 2;
 };
 
 struct Settings_Controls {

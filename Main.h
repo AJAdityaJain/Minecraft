@@ -18,6 +18,8 @@ static const glm::vec3 Z = glm::vec3(0.0f, 0.0f, 1.0f);
 static const glm::vec3 Vec30 = glm::vec3(0, 0, 0);
 static const glm::vec3 Vec35 = glm::vec3(0.5f, 0.5f, 0.5f);
 
+int Get(int x, int y, int z);
+
 int main();
 
 #endif // !MAIN
