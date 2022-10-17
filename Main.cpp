@@ -43,53 +43,33 @@ int SetupWindow(GLFWwindow*& Window) {
 	glEnable(GL_CULL_FACE);
 	glClearColor(0.2f, 0.7f, 0.92f, 1.0f);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	GLFWimage images[1]{};
+	int d = 4;
+	images[0].pixels = stbi_load("C:\\Minecraft2\\Resources\\Icon.png", &images[0].width, &images[0].height, &d, d); //rgba channels 
+	glfwSetWindowIcon(Window, 1, images);
+	stbi_image_free(images[0].pixels);
 	return 0;
 }
 
 int main() {
 	std::cout << "Main.cpp" << std::endl;
-	
+
 	GLFWwindow* Window;if (SetupWindow(Window) == -1) {return -1;}
-	GLFWimage images[1]{};
-	int d = 4;
-	images[0].pixels = stbi_load("C:\\MCRipoff\\Resources\\Icon.png", &images[0].width, &images[0].height, &d, d); //rgba channels 
-	glfwSetWindowIcon(Window, 1, images);
-	stbi_image_free(images[0].pixels);
-
-	std::cout << "Init and setup window" << std::endl;
-
 	
-
 	a = new World();
+	CHUNK_CLASS_H::noise.SetNoiseType(noise.NoiseType_Perlin);
 	a->GenerateChunk(16,16);
 	Remesh();
 
-	std::cout << "Terrain Gen" << std::endl;
+
+	Shader shaderProgram("C:\\Minecraft2\\Resources\\default.vert.shader", "C:\\Minecraft2\\Resources\\default.frag.shader");
 
 
+	Texture textures("C:\\Minecraft2\\Resources\\textures.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);textures.texUnit(shaderProgram, "tex0", 0);	textures.Bind();shaderProgram.Activate();
 
 
-	Shader shaderProgram("C:\\MCRipoff\\Resources\\default.vert.shader", "C:\\MCRipoff\\Resources\\default.frag.shader");
+	Camera camera(0, 0, 0);	Player player(16*16, 30, 16*16);camera.ProjMatrix();
 	
-	std::cout << "Setup Shader" << std::endl;
-
-
-
-
-	Texture textures("C:\\MCRipoff\\Resources\\textures.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	textures.texUnit(shaderProgram, "tex0", 0);
-	textures.Bind();
-	shaderProgram.Activate();
-
-	std::cout << "Init and Bind Texture" << std::endl;
-	
-
-	Camera camera(0, 0, 0);
-	Player player(16*16, 30, 16*16);
-	
-	std::cout << "Create Camera and Player" << std::endl;
-
-	camera.ProjMatrix();
 
 	glfwSetCursorPos(Window, width/2.0, height/2.0);
 	
@@ -115,6 +95,9 @@ int main() {
 		
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
+	}
+	for (auto c : a->chunks) {
+		c->Allocate();
 	}
 
 	std::cout << "Delete everything" << std::endl;

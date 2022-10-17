@@ -1,4 +1,5 @@
 #include "World.h"
+#include<iostream>
 int World::GetBlock(int x, int y, int z) {
 	for (size_t i = 0; i < chunks.size(); i++)
 	{
@@ -6,7 +7,7 @@ int World::GetBlock(int x, int y, int z) {
 			return -1 + (int)chunks[i]->GetChar(x, y, z);
 		}
 	}
-	return 1;
+	return DIRT;
 }
 void World::SetBlock(int w, int x, int y, int z) {
 	for (size_t i = 0; i < chunks.size(); i++)
@@ -15,7 +16,6 @@ void World::SetBlock(int w, int x, int y, int z) {
 			chunks[i]->SetBlock(w, x, y, z);
 		}
 	}
-	return;
 }
 void World::GenerateChunk(int x, int z)
 {
@@ -23,8 +23,9 @@ void World::GenerateChunk(int x, int z)
 		Chunk* c;
 		c = new Chunk(x, z);
 		c->Retrieve();
+		//c = nullptr;
+
 		World::chunks.push_back(c);
-		c = nullptr;
 	}
 }
 void World::SetMesh()
@@ -39,6 +40,7 @@ void World::Remove(glm::vec2 ch) {
 	for (int i = 0; i < chunks.size(); i++)
 	{
 		if (abs(chunks[i]->x - ch.x) > Graphics.Render_Distance || abs(chunks[i]->z - ch.y) > Graphics.Render_Distance) {
+			chunks[i]->Allocate();
 			chunks.erase(chunks.begin() + i);
 		}
 	}

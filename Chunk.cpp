@@ -1,6 +1,14 @@
 #include"chunk.h"
 #include"Main.h"
 
+static bool notOpaque(int x, int y, int z) {
+	int b = Get(x, y, z);
+	return b == AIR || b == CROSS_GRASS || b == LEAVES || b == ROSE || b == FLOWER_LEAVES;
+}
+static bool isBlock(int x) {
+	return x != CROSS_GRASS && x != ROSE;
+}
+
 Chunk::Chunk(int X, int Z) {
 	Chunk::x = X; Chunk::z = Z;
 	
@@ -14,13 +22,15 @@ Chunk::Chunk(int X, int Z) {
 			}
 		}
 	}
-	noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
 
 }
-void Chunk::SetBlock(int c,int x,int y , int z) {
-	Chunk::c[x % 16][y % 64][z % 16] = (char)(c + 1);
+void Chunk::SetBlock(int w, int X, int y, int Z) {
+		Chunk::c[X%16][y][Z%16] = (char)(w + 1);
+	
 }
 char Chunk::GetChar(int x, int y, int z) {
+	if (y <= 0)
+		return AIR;
 	return Chunk::c[x%16][y%64][z%16];
 }
 void Chunk::Generate() {
@@ -31,22 +41,48 @@ void Chunk::Generate() {
 	{
 		for (int Z = 0; Z < 16; Z++)
 		{
-			//int f = noise.GetNoise((float)(x * 16 + X), (float)(z * 16 + Z))*5;
-			//SetBlock(BEDROCK, X, 1, Z);
-			//for (int Y = 2; Y < 23; Y++)
-			//{
-				//SetBlock(STONE, X, Y, Z);
-			//}
-			//SetBlock(DIRT, X, 23, Z);
-			//SetBlock(DIRT, X, 24, Z);
-			//SetBlock(DIRT, X, 25, Z);
-			SetBlock(GRASS, X, 26 + (int)(noise.GetNoise((float)(x * 16 + X), (float)(z * 16 + Z)) * 5), Z);
+			int f = (int)(noise.GetNoise((float)(x * 16 + X), (float)(z * 16 + Z)) * 6);
+			for (int Y = 2; Y < 24+f; Y++)
+			{
+				SetBlock(STONE, X, Y, Z);
+			}
+			SetBlock(DIRT, X, 24 + f, Z);
+			SetBlock(DIRT, X, 25 + f, Z);
+			SetBlock(DIRT, X, 26 + f, Z);
+
+			SetBlock(GRASS, X, 27 + f, Z);
+			if ((rand() % 100) < 8)
+				SetBlock(CROSS_GRASS, X, 28 + f, Z);
+			if ((rand() % 100) < 2)
+				SetBlock(ROSE, X, 28 + f, Z);
+
+			if (X == 7 && Z == 7) {
+				SetBlock(LOG, X, 28 + f, Z);
+				SetBlock(LOG, X, 29 + f, Z);
+
+				SetBlock(LEAVES, X - 1, 30 + f, Z);
+				SetBlock(LEAVES, X + 1, 30 + f, Z);
+				SetBlock(LEAVES, X, 30 + f, Z - 1);
+				SetBlock(LEAVES, X, 30 + f, Z + 1);
+				SetBlock(LOG, X, 30 + f, Z);
+
+				SetBlock(LEAVES, X - 1, 31 + f, Z);
+				SetBlock(LEAVES, X + 1, 31 + f, Z);
+				SetBlock(LEAVES, X, 31 + f, Z - 1);
+				SetBlock(LEAVES, X, 31 + f, Z + 1);
+				SetBlock(LEAVES, X, 31 + f, Z);
+				
+				SetBlock(LEAVES, X, 32 + f, Z);
+
+			}
+			SetBlock(BEDROCK, X, 1, Z);
+
 		}
 	}
 }
 void Chunk::Allocate()
 {
-	std::ofstream MyFile("C:\\MCRipoff\\World\\" + std::to_string(x) + "x" + std::to_string(z) + ".chnk");
+	std::ofstream MyFile("C:\\Minecraft2\\World\\" + std::to_string(x) + "x" + std::to_string(z) + ".chnk");
 	
 	for (size_t x = 0; x < 16; x++)
 	{
@@ -63,17 +99,17 @@ void Chunk::Allocate()
 }
 void Chunk::Retrieve()
 {
-	std::ifstream MyReadFile("C:\\MCRipoff\\World\\" + std::to_string(x) + "x" + std::to_string(z) + ".chnk");
+	std::ifstream MyReadFile("C:\\Minecarft2\\World\\" + std::to_string(x) + "x" + std::to_string(z) + ".chnk");
 	
 	if (MyReadFile.good()) {
 		std::string myText;
 		getline(MyReadFile, myText);
 		int i = 0;
-		for (size_t z = 0; z < 16; z++)
+		for (short x = 0; x < 16; x++)
 		{
-			for (size_t y = 0; y < 64; y++)
+			for (short y = 0; y < 64; y++)
 			{
-				for (size_t x = 0; x < 16; x++)
+				for (short z = 0; z < 16; z++)
 				{
 					Chunk::c[x][y][z] = (char)myText[i];
 					i++;
@@ -84,7 +120,7 @@ void Chunk::Retrieve()
 	}
 	else {
 		Generate();
-		//Allocate();
+		Allocate();
 	}
 	MyReadFile.close();
 
@@ -99,24 +135,29 @@ void Chunk::SetMesh(Mesh& mesh) {
 			{
 				cb = Get(x, y, z) * 6;
 				if (cb != 0) {
-
-					if (Get(x + 1, y, z) == AIR) {
-						mesh.AddFace(EAST, x  , y, z  , TEXTURES[cb]);
+					if (isBlock(cb/6)) {
+						if (notOpaque(x + 1, y, z)) {
+							mesh.AddFace(EAST, x, y, z, TEXTURES[cb]);
+						}
+						if (notOpaque(x - 1, y, z)) {
+							mesh.AddFace(WEST, x, y, z, TEXTURES[cb + 1]);
+						}
+						if (notOpaque(x, y + 1, z)) {
+							mesh.AddFace(TOP, x, y, z, TEXTURES[cb + 2]);
+						}
+						if (notOpaque(x, y - 1, z)) {
+							mesh.AddFace(BOTTOM, x, y, z, TEXTURES[cb + 3]);
+						}
+						if (notOpaque(x, y, z + 1)) {
+							mesh.AddFace(FRONT, x, y, z, TEXTURES[cb + 4]);
+						}
+						if (notOpaque(x, y, z - 1)) {
+							mesh.AddFace(BACK, x, y, z, TEXTURES[cb + 5]);
+						}
 					}
-					if (Get(x - 1, y, z) == AIR) {
-						mesh.AddFace(WEST, x  , y, z  , TEXTURES[cb+1]);
-					}
-					if (Get(x, y + 1, z) == AIR) {
-						mesh.AddFace(TOP, x  , y, z  , TEXTURES[cb+2]);
-					}
-					if (Get(x, y - 1, z) == AIR) {
-						mesh.AddFace(BOTTOM, x  , y, z  , TEXTURES[cb+3]);
-					}
-					if (Get(x, y, z + 1) == AIR) {
-						mesh.AddFace(FRONT, x  , y, z  , TEXTURES[cb+4]);
-					}
-					if (Get(x, y, z - 1) == AIR) {
-						mesh.AddFace(BACK, x  , y, z  , TEXTURES[cb+5]);
+					else {
+						mesh.AddFace(DIAG1, x, y, z, TEXTURES[cb]);
+						mesh.AddFace(DIAG2, x, y, z, TEXTURES[cb]);
 					}
 				}
 			}

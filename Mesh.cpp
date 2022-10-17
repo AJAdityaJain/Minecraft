@@ -55,10 +55,27 @@ void Mesh::AddFace(FACES face, GLfloat a, GLfloat b, GLfloat c, int tex){
 		AddV(a, b + 0, c + 1, tx, ty2);
 		AddV(a + 1, b + 0, c + 1, tx2, ty2);
 	}
+	if (face == DIAG1) {
+		AddV(a + 1, b + 0, c + 1, tx, ty);
+		AddV(a + 0, b + 0, c + 0, tx2, ty);
+		AddV(a + 1, b + 1, c + 1, tx, ty2);
+		AddV(a + 0, b + 1, c + 0, tx2, ty2);
+	}
+	if (face == DIAG2) {
+		AddV(a + 0, b + 0, c + 1, tx, ty);
+		AddV(a + 1, b + 0, c + 0, tx2, ty);
+		AddV(a + 0, b + 1, c + 1, tx, ty2);
+		AddV(a + 1, b + 1, c + 0, tx2, ty2);
+	}
 	
+	if (face == DIAG1 || face == DIAG2) {
+		AddI(size + 1); AddI(size + 0); AddI(size + 2);
+		AddI(size + 1); AddI(size + 2); AddI(size + 3);
 
-	if (face == FRONT || face == EAST || face == BOTTOM) {
-
+		AddI(size + 0); AddI(size + 1); AddI(size + 2);
+		AddI(size + 2); AddI(size + 1); AddI(size + 3);
+	}
+	else if (face == FRONT || face == EAST || face == BOTTOM) {
 		AddI(size + 1); AddI(size + 0); AddI(size + 2);
 		AddI(size + 1); AddI(size + 2); AddI(size + 3);
 	}

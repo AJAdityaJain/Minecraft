@@ -22,6 +22,7 @@ public:
 	glm::vec3 CamOri = glm::vec3(0,0,0);
 
 	bool l = true;
+	bool m = true;
 	bool r = true;
 
 	double mouseX;
@@ -113,11 +114,10 @@ public:
 			Raycast ray;
 			ray.Position = Position + Vec35;
 			ray.Orient(CamOri);
-			ray.MoveCheck(false);
+			ray.MoveCheck(false,0);
 			Remesh();
 			l = false;
 		}
-
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE && !l) {
 			l = true;
 		}
@@ -125,15 +125,25 @@ public:
 			Raycast ray;
 			ray.Position = Position + Vec35;
 			ray.Orient(CamOri);
-			ray.MoveCheck(true);
+			ray.MoveCheck(true, Current_Block);
 			Remesh();
 			r = false;
 		}
-
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && !r) {
 			r = true;
 		}
 
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS && m) {
+			Current_Block+=GRASS;
+			if (Current_Block > Size_Block) {
+				Current_Block = GRASS;
+			}
+			std::cout << Current_Block << "CHange\n";
+			m = false;
+		}
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_RELEASE && !m) {
+			m = true;
+		}
 		Collision(displacment, Position.x, Position.y, Position.z);
 	}
 };

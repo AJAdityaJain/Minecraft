@@ -6,7 +6,7 @@ void Raycast::Orient(glm::vec3 o) {
 	//Orientation += Vec35;
 }
 
-void Raycast::MoveCheck(bool b) {
+void Raycast::MoveCheck(bool b, int bl) {
 	if (b) {
 		glm::vec3 lp = Vec30;
 		for (size_t i = 0; i < 5*SpeedInv; i++)
@@ -17,8 +17,7 @@ void Raycast::MoveCheck(bool b) {
 				lp = Position;
 			}
 			else {
-				
-				Set(BEDROCK, (int)lp.x, (int)lp.y, (int)lp.z);
+				Set(bl, (int)lp.x, (int)lp.y, (int)lp.z);
 				return;
 			}
 		}

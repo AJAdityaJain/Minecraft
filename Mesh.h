@@ -12,7 +12,9 @@ enum FACES {
 	WEST,
 	EAST,
 	BOTTOM,
-	TOP
+	TOP,
+	DIAG1,
+	DIAG2
 };
 
 class Mesh

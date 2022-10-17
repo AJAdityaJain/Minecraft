@@ -5,13 +5,16 @@
 #include "Mesh.h"
 #include "libraries/include/inc/Perlin.h"
 
+
+static FastNoiseLite noise;
+
 class Chunk {
 public:
 	int x = 0;
 	int z = 0;
 	
 	Chunk(int X=16, int Z=16);
-	void SetBlock(int c, int x, int y, int z);
+	void SetBlock(int w, int X, int y, int Z);
 	char GetChar(int x, int y, int z);
 	
 	void Allocate();
@@ -21,7 +24,6 @@ public:
 
 private:
 	char c[16][64][16];
-	FastNoiseLite noise;
 	void Generate();
 };
 

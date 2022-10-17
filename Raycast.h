@@ -11,7 +11,7 @@ public:
 	glm::vec3 Orientation = Vec30;
 	float SpeedInv = 4;
 	void Orient(glm::vec3 o);
-	void MoveCheck(bool b);
+	void MoveCheck(bool b, int bl);
 
 };
 
