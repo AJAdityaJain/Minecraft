@@ -38,9 +38,6 @@
     <ClCompile Include="ShaderClass.cpp">
       <Filter>Source Files\GFX</Filter>
     </ClCompile>
-    <ClCompile Include="stb.cpp">
-      <Filter>Source Files\GFX</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\GFX</Filter>
     </ClCompile>
@@ -51,9 +48,6 @@
       <Filter>Source Files\GFX</Filter>
     </ClCompile>
     <ClCompile Include="EBO.cpp">
-      <Filter>Source Files\GFX</Filter>
-    </ClCompile>
-    <ClCompile Include="glad.c">
       <Filter>Source Files\GFX</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
@@ -73,6 +67,12 @@
     </ClCompile>
     <ClCompile Include="Raycast.cpp">
       <Filter>Source Files\ENTITY</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Source Files\GFX</Filter>
+    </ClCompile>
+    <ClCompile Include="stb.cpp">
+      <Filter>Source Files\GFX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
